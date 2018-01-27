@@ -2,28 +2,29 @@
   <div class="results">
     <h1>Top Movies from the 20<sup>th</sup> Century</h1>
     <p class="search-meta">
-      <span class="current-page"><b>Current Page:</b> 1</span><!-- TODO: Fill in current page value from data. -->
-      <span class="total-pages"><b>Pages:</b> 777</span><!-- TODO: Fill in total pages value from data. -->
-      <span class="total-results"><b>Count:</b> 3232</span><!-- TODO: Fill in results count value from data. -->
+      <span class="current-page"><b>Current Page:</b> {{ page }}</span>
+      <span class="total-pages"><b>Pages:</b> {{ total_results }} </span>
+      <span class="total-results"><b>Count:</b> {{total_pages }}</span>
     </p>
 
     <ul>
-      <li class="movie-item"><!-- TODO: Use a for loop to iterate through each result in the results array. -->
-        <img src="https://image.tmdb.org/t/p/w150_and_h225_bestv2/p64TtbZGCElxQHpAMWmDHkWJlH2.jpg" alt="Title of Movie Poster" class="poster-image"><!-- TODO: Combine base URL with poster_path value in data to make the image src URL (Hint: Use v-bind.). -->
-        <h2 class="title"><a href="https://www.themoviedb.org/movie/78">Movie Title Goes Here</a></h2><!-- TODO: Combine base URL with movie ID value in data to make the link href URL (Hint: Use v-bind.). -->
-        <div class="ratings">
-          <span class="rating-category critics-choice">Critic's Choice</span><!-- TODO: Use a conditional to determine if the vote_average is over 8. -->
-          <span class="rating-category well-liked">Well Liked</span><!-- TODO: Use a conditional to determine if the vote_average is between 7 and 8. -->
-          <span class="rating-category stinker">Stinker</span><!-- TODO: Use a conditional to determine if the vote_average is under 7. -->
-          <span class="vote-average">8.4</span> with <span class="vote-count">3676</span> votes <!-- TODO: Fill in the vote_average and vote_count values accordingly. -->
-        </div>
-        <p class="overview"><!-- TODO: Fill in the movie overview from the data. -->
+      <li class="movie-item" v-for="result in results">
+        <img v-bind:src="'https://image.tmdb.org/t/p/w150_and_h225_bestv2'+ result.poster_path" v-bind:alt="result.title + 'Poster'" class="poster-image">
+       <h2 class="title"><a v-bind:href="'https://www.themoviedb.org/movie/'+result.id">{{ result.title }}</a></h2>
+     <div class="ratings">
+        <span class="rating-category critics-choice" v-if="result.vote_average > 8">Critic's Choice</span>
+          <span class="rating-category well-liked" v-else-if="(result.vote_average > 7) && (result.vote_average <= 8)">Well Liked</span>
+            <span class="rating-category stinker" v-else>Stinker</span>
+            <span class="vote-average">{{ result.vote_average }}</span> with <span class="vote-count">{{ result.vote_count }}</span> votes
+    </div> 
+        <p class="overview">
+          {{ result.overivew}}
           Movie overivew goes here. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Cras dapibus. Praesent porttitor, nulla vitae posuere iaculis, arcu nisl dignissim dolor, a pretium mi sem ut ipsum.
         </p>
-        <p class="release-date">Original Release: 1999-12-31</p><!-- TODO: Fill in the release date from the data. -->
-        <ul class="genre-list"><!-- TODO: Use a loop to iterate through all of the genres for this movie. -->
-          <li>genre</li><!-- TODO: Fill in the genre name from the data. -->
-        </ul>
+        <p class="release-date">Original Release: {{ result.release_date }}</p>
+       <ul class="genre-list">
+       <li v-for="genre in result.genres">{{ genre }}</li>
+    </ul>
       </li>
     </ul>
   </div>
@@ -56,7 +57,8 @@ ul {
 .movie-item {
   margin: 10px 0;
   padding: 2rem;
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.2);
+  box-shadow: 4px 4px 10px rgba(247, 5, 5, 0);
+  
 }
 
 .movie-item img {
@@ -66,15 +68,15 @@ ul {
 
 .release-date {
   font-weight: 600;
-  font-size: 12px;
-  color: #333;
+  font-size: 24px;
+  color: rgb(180, 156, 179);
 }
 
 .rating-category {
   font-size: 12px;
   color: #fff;
   font-weight: 800;
-  background: #ccc;
+  background: rgba(204, 218, 9, 0.452);
   padding: 0.5rem;
   border-radius: 4px;
 }
@@ -104,6 +106,6 @@ ul {
 }
 
 a {
-  color: #42b983;
+  color: #ca0000;
 }
 </style>
